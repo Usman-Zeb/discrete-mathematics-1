@@ -4,96 +4,115 @@
 
 using namespace std;
 
-void decrypt()
+class decryption
 {
-	ifstream input;
-	input.open("encrypted.txt");
-	ofstream output;
-	output.open("decrypted.txt");
-	int k = 0;
-	int shift = 0;
-	char temp;
-	string reference = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \n,.";
-	
-	temp = input.get();
-	for (int i = 0; i < reference.length(); i++)
+
+private:
+	string reference;
+	int k;
+
+public:
+
+	decryption()
 	{
-		if (temp == reference[i])
-		{
-			k = i - 3;
-			break;
-		}
+		k = 0;
+		reference = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \n,.";
 	}
 
-	do
+	void decrypt()
 	{
-
-		for (int j = 0; j < reference.length(); j++)
+		ifstream input;
+		input.open("encrypted.txt");
+		ofstream output;
+		output.open("decrypted.txt");
+		
+		int shift = 0;
+		char temp;
+		
+		temp = input.get();
+		for (int i = 0; i < reference.length(); i++)
 		{
-			if (temp == reference[j])
+			if (temp == reference[i])
 			{
-				shift = (j - k) % 66;
-				if (shift < 0) shift += 66;
-				temp = reference[shift];
+				k = i - 3;
 				break;
 			}
 		}
-		output << temp;
-	} while (input.get(temp));
 
-	input.close();
-	output.close();
-
-}
-
-void disp_encrypted()
-{
-	ifstream encrypted_textfile;
-	encrypted_textfile.open("encrypted.txt");
-	string line = "";
-
-	if (!encrypted_textfile)
-	{
-		cout << "File not found!" << endl;
-	}
-	else
-	{
-		cout << "\t\t\t\t\t\t[Encrypted Text]\n\n";
-		while (!encrypted_textfile.eof())
+		do
 		{
-			getline(encrypted_textfile, line);
-			cout << line << endl;
+
+			for (int j = 0; j < reference.length(); j++)
+			{
+				if (temp == reference[j])
+				{
+					shift = (j - k) % 66;
+					if (shift < 0) shift += 66;
+					temp = reference[shift];
+					break;
+				}
+			}
+			output << temp;
+		} while (input.get(temp));
+
+		input.close();
+		output.close();
+
+	}
+
+	void disp_encrypted()
+	{
+		ifstream encrypted_textfile;
+		encrypted_textfile.open("encrypted.txt");
+		string line = "";
+
+		if (!encrypted_textfile)
+		{
+			cout << "File not found!" << endl;
 		}
-	}
-}
-
-void disp_plain()
-{
-	ifstream plain_textfile;
-	plain_textfile.open("decrypted.txt");
-
-	string line = "";
-
-	if (!plain_textfile)
-	{
-		cout << "File not found!" << endl;
-	}
-	else
-	{
-		cout << "\t\t\t\t\t\t[Plain Text]\n\n";
-		while (!plain_textfile.eof())
+		else
 		{
-			getline(plain_textfile, line);
-			cout << line << endl;
+			cout << "\t\t\t\t\t\t[Encrypted Text]\n\n";
+			while (!encrypted_textfile.eof())
+			{
+				getline(encrypted_textfile, line);
+				cout << line << endl;
+			}
 		}
 	}
 
-}
+	void disp_plain()
+	{
+		ifstream plain_textfile;
+		plain_textfile.open("decrypted.txt");
+
+		string line = "";
+
+		if (!plain_textfile)
+		{
+			cout << "File not found!" << endl;
+		}
+		else
+		{
+			cout << "\t\t\t\t\t\t[Plain Text]\n\n";
+			while (!plain_textfile.eof())
+			{
+				getline(plain_textfile, line);
+				cout << line << endl;
+			}
+		}
+
+	}
+
+};
+
+
 
 int main()
 {
 	bool flag = true;
 	int selector = 0;
+	decryption decrypt_obj;
 
 	do
 	{
@@ -114,16 +133,16 @@ int main()
 		switch (selector)
 		{
 		case 1:
-			decrypt();
+			decrypt_obj.decrypt();
 			break;
 
 		case 2:
-			disp_encrypted();
+			decrypt_obj.disp_encrypted();
 
 			break;
 
 		case 3:
-			disp_plain();
+			decrypt_obj.disp_plain();
 
 			break;
 
